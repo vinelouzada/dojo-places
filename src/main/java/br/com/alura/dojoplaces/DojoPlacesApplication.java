@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootApplication
 public class DojoPlacesApplication {
 
-	@GetMapping("/oi")
+    @GetMapping("/oi")
     public String oi() {
         return "/oi";
     }
