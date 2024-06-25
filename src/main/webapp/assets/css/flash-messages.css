@@ -1,0 +1,11 @@
+.flash-message {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.flash-message-danger {
+    background-color: #ffcccc;
+    border: 1px solid #ff6666;
+    color: #ff3333;
+}

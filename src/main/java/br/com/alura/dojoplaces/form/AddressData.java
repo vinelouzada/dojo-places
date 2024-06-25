@@ -7,7 +7,8 @@ public record AddressData(Long id,
                           String code,
                           String neighborhood,
                           String city,
-                          String createdAt) {
+                          String createdAt,
+                          String updatedAt) {
 
     public AddressData(Address address){
         this(address.getId(),
@@ -15,6 +16,7 @@ public record AddressData(Long id,
                 address.getCode(),
                 address.getNeighborhood(),
                 address.getCity(),
-                address.getCreatedAtFormatedYear());
+                address.getCreatedAtFormatedYear(),
+                address.getUpdatedAtAsDaysAgo());
     }
 }

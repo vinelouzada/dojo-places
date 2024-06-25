@@ -1,11 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
+    <link rel="stylesheet" href="/assets/css/flash-messages.css">
 <head>
     <title>Endereços</title>
 </head>
 <body>
     <h1>Endereços</h1>
+        <div class="flash-message flash-message-danger">
+            ${flashMessage}
+        </div>
     <table>
         <thead>
         <tr>
@@ -14,6 +18,7 @@
             <th>Bairro</th>
             <th>Cidade</th>
             <th>Data de Criação</th>
+            <th>Data de Atualização</th>
             <th>Editar</th>
             <th>Excluir</th>
         </tr>
@@ -26,14 +31,13 @@
                     <td>${address.neighborhood()}</td>
                     <td>${address.city()}</td>
                     <td>${address.createdAt()}</td>
+                    <td>${address.updatedAt()}</td>
                     <td>
-                        <form action="/addresses/${address.id()}/edit">
-                            <button>Editar</button>
-                        </form>
+                        <a href="/address/${address.id()}/edit"><button>Editar</button></a>
                     </td>
                     <td>
-                        <form action="/addresses/delete/" method="post">
-                            <input type="hidden" value="${address.id()}">
+                        <form action="/address/delete" method="post">
+                            <input name="id" type="hidden" value="${address.id()}">
                             <button>Excluir</button>
                         </form>
                     </td>

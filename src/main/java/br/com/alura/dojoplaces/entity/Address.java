@@ -1,10 +1,12 @@
 package br.com.alura.dojoplaces.entity;
 
+import br.com.alura.dojoplaces.form.UpdateForm;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -65,4 +67,49 @@ public class Address {
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return createdAt.format(pattern);
     }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void updateModel(UpdateForm updateForm) {
+        setCity(updateForm.getCity());
+        setNeighborhood(updateForm.getNeighborhood());
+        setCode(updateForm.getCode());
+        setStreet(updateForm.getStreet());
+        setUpdatedAt();
+    }
+
+    public void setUpdatedAt(){
+        this.updatedAt = LocalDateTime.now();
+    }
+
+
+    public String getUpdatedAtAsDaysAgo(){
+
+        if (updatedAt == null){
+            return null;
+        }
+
+        Duration daysAgo = Duration.between(updatedAt, LocalDateTime.now());
+
+        if (daysAgo.toDays() == 1){
+            return daysAgo.toDays() + " dia atrás";
+        }
+
+        return daysAgo.toDays() + " dias atrás";
+    }
+
 }
