@@ -7,5 +7,11 @@
 .flash-message-danger {
     background-color: #ffcccc;
     border: 1px solid #ff6666;
-    color: #ff3333;
+    color: #ce0404;
+}
+
+.flash-message-success {
+    background-color: #e6ffe6;
+    border: 1px solid #b3ffb3;
+    color: #104110;
 }

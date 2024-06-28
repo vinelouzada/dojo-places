@@ -3,9 +3,19 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
+
+<link rel="stylesheet" href="/assets/css/flash-messages.css">
+
 <head>
     <title>Editar Endereço</title>
 </head>
+
+<c:if test="${not empty flashMessage}">
+    <div class="flash-message ${typeMessage}">
+            ${flashMessage}
+    </div>
+</c:if>
+
 <body>
 <form:form modelAttribute="form" action="/address/edit" method="post">
     <div>

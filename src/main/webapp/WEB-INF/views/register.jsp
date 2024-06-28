@@ -1,11 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<link rel="stylesheet" href="/assets/css/flash-messages.css">
 
 <h1>Bora!</h1>
 
 <br/>
 <br/>
+
+<c:if test="${not empty flashMessage}">
+    <div class="flash-message ${typeMessage}">
+            ${flashMessage}
+    </div>
+</c:if>
 
 <form:form modelAttribute="form" action="/register" method="post">
     <div>

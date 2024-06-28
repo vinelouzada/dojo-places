@@ -7,9 +7,11 @@
 </head>
 <body>
     <h1>Endereços</h1>
-        <div class="flash-message flash-message-danger">
+    <c:if test="${not empty flashMessage}">
+        <div class="flash-message ${typeMessage}">
             ${flashMessage}
         </div>
+    </c:if>
     <table>
         <thead>
         <tr>

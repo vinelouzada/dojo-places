@@ -7,6 +7,7 @@ import br.com.alura.dojoplaces.form.RegisterForm;
 import br.com.alura.dojoplaces.form.UpdateForm;
 import br.com.alura.dojoplaces.repository.AddressRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,14 +43,24 @@ public class AddressController {
         return "/register";
     }
 
+    @Transactional
     @PostMapping("/register")
-    public String create(@Valid @ModelAttribute("form") RegisterForm form, BindingResult bindingResult, Model model){
+    public String create(@Valid @ModelAttribute("form") RegisterForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()) {
             return createPage(form, model);
         }
 
+        if(addressRepository.existsByCode(form.getCode())) {
+            redirectAttributes.addFlashAttribute("flashMessage", "O código já está em uso");
+            redirectAttributes.addFlashAttribute("typeMessage", "flash-message-danger");
+            return "redirect:/register";
+        }
+
         this.addressRepository.save(form.toModel());
+
+        redirectAttributes.addFlashAttribute("flashMessage", "Lugar cadastrado com sucesso!");
+        redirectAttributes.addFlashAttribute("typeMessage", "flash-message-success");
 
         return "redirect:/addresses";
     }
@@ -65,18 +76,27 @@ public class AddressController {
         return "/address-edit";
     }
 
+    @Transactional
     @PostMapping("/address/edit")
-    public String edit(@Valid @ModelAttribute("form") UpdateForm form, BindingResult bindingResult, Model model){
+    public String edit(@Valid @ModelAttribute("form") UpdateForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()) {
             return editPage(form.getId(), model, form);
         }
 
-        Address address = addressRepository.findById(form.getId()).orElseThrow(EntityNotFoundException::new);
-        address.updateModel(form);
+        if(addressRepository.existsByCode(form.getCode())) {
+            redirectAttributes.addFlashAttribute("flashMessage", "O código já está em uso");
+            redirectAttributes.addFlashAttribute("typeMessage", "flash-message-danger");
+            return "redirect:/address/%d/edit".formatted(form.getId());
+        }
 
+        Address address = addressRepository.findById(form.getId()).orElseThrow(EntityNotFoundException::new);
+
+        address.updateModel(form);
         this.addressRepository.save(address);
 
+        redirectAttributes.addFlashAttribute("flashMessage", "Lugar editado com sucesso!");
+        redirectAttributes.addFlashAttribute("typeMessage", "flash-message-success");
         return "redirect:/addresses";
     }
 
@@ -86,8 +106,8 @@ public class AddressController {
         addressRepository.delete(address);
 
         redirectAttributes.addFlashAttribute("flashMessage", "Endereço deletado com sucesso!");
+        redirectAttributes.addFlashAttribute("typeMessage", "flash-message-success");
 
         return "redirect:/addresses";
     }
-
 }
