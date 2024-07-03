@@ -5,6 +5,8 @@ import br.com.alura.dojoplaces.entity.Address;
 import br.com.alura.dojoplaces.form.AddressData;
 import br.com.alura.dojoplaces.form.RegisterForm;
 import br.com.alura.dojoplaces.form.UpdateForm;
+import br.com.alura.dojoplaces.form.validators.RegisterFormValidator;
+import br.com.alura.dojoplaces.form.validators.UpdateFormValidator;
 import br.com.alura.dojoplaces.repository.AddressRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -12,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,9 +24,15 @@ import java.util.List;
 public class AddressController {
 
     private AddressRepository addressRepository;
+    private RegisterFormValidator registerFormValidator;
+    private UpdateFormValidator updateFormValidator;
 
-    public AddressController(AddressRepository addressRepository) {
+    public AddressController(AddressRepository addressRepository,
+                             RegisterFormValidator registerFormValidator,
+                             UpdateFormValidator updateFormValidator) {
         this.addressRepository = addressRepository;
+        this.registerFormValidator = registerFormValidator;
+        this.updateFormValidator = updateFormValidator;
     }
 
     @GetMapping("/addresses")
@@ -84,12 +93,12 @@ public class AddressController {
             return editPage(form.getId(), model, form);
         }
 
-        if(addressRepository.existsByCode(form.getCode())) {
-            redirectAttributes.addFlashAttribute("flashMessage", "O código já está em uso");
-            redirectAttributes.addFlashAttribute("typeMessage", "flash-message-danger");
-            return "redirect:/address/%d/edit".formatted(form.getId());
-        }
-
+//        if(addressRepository.existsByCode(form.getCode())) {
+//            redirectAttributes.addFlashAttribute("flashMessage", "O código já está em uso");
+//            redirectAttributes.addFlashAttribute("typeMessage", "flash-message-danger");
+//            return "redirect:/address/%d/edit".formatted(form.getId());
+//        }
+//
         Address address = addressRepository.findById(form.getId()).orElseThrow(EntityNotFoundException::new);
 
         address.updateModel(form);
@@ -110,4 +119,15 @@ public class AddressController {
 
         return "redirect:/addresses";
     }
+
+    @InitBinder("RegisterForm")
+    public void initBinderCreateAddress(WebDataBinder binder) {
+        binder.addValidators(registerFormValidator);
+    }
+
+    @InitBinder("UpdateForm")
+    public void initBinderUpdateAddress(WebDataBinder binder) {
+        binder.addValidators(updateFormValidator);
+    }
+
 }
