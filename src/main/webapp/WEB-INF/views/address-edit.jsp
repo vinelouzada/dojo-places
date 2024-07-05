@@ -17,7 +17,7 @@
 </c:if>
 
 <body>
-<form:form modelAttribute="form" action="/address/edit" method="post">
+<form:form modelAttribute="updateForm" action="/address/edit" method="post">
     <div>
         <form:input path="id" value="${address.id()}" type="hidden"/>
     </div>

@@ -38,9 +38,9 @@
                         <a href="/address/${address.id()}/edit"><button>Editar</button></a>
                     </td>
                     <td>
-                        <form action="/address/delete" method="post">
+                        <form action="/address/delete" method="post"  class="delete-form">
                             <input name="id" type="hidden" value="${address.id()}">
-                            <button>Excluir</button>
+                            <button type="submit">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -51,5 +51,16 @@
     <form action="/register">
         <button>Criar Endereço</button>
     </form>
+
+
+    <script>
+        addresses = document.querySelectorAll(".delete-form");
+
+        addresses.forEach(address => address.addEventListener("click", function (event){
+            if (!confirm("Você deseja realmente deletar esse endereco?")){
+                event.preventDefault();
+            }
+        }));
+    </script>
 </body>
 </html>

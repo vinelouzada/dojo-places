@@ -80,25 +80,25 @@ public class AddressController {
         Address address = addressRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         model.addAttribute("address", new AddressData(address));
-        model.addAttribute("form", form);
+        model.addAttribute("updateForm", form);
 
         return "/address-edit";
     }
 
     @Transactional
     @PostMapping("/address/edit")
-    public String edit(@Valid @ModelAttribute("form") UpdateForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
+    public String edit(@Valid UpdateForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()) {
             return editPage(form.getId(), model, form);
         }
 
-//        if(addressRepository.existsByCode(form.getCode())) {
-//            redirectAttributes.addFlashAttribute("flashMessage", "O código já está em uso");
-//            redirectAttributes.addFlashAttribute("typeMessage", "flash-message-danger");
-//            return "redirect:/address/%d/edit".formatted(form.getId());
-//        }
-//
+        if(addressRepository.existsByCode(form.getCode())) {
+            redirectAttributes.addFlashAttribute("flashMessage", "O código já está em uso");
+            redirectAttributes.addFlashAttribute("typeMessage", "flash-message-danger");
+            return "redirect:/address/%d/edit".formatted(form.getId());
+        }
+
         Address address = addressRepository.findById(form.getId()).orElseThrow(EntityNotFoundException::new);
 
         address.updateModel(form);
@@ -120,12 +120,12 @@ public class AddressController {
         return "redirect:/addresses";
     }
 
-    @InitBinder("RegisterForm")
+    @InitBinder("registerForm")
     public void initBinderCreateAddress(WebDataBinder binder) {
         binder.addValidators(registerFormValidator);
     }
 
-    @InitBinder("UpdateForm")
+    @InitBinder("updateForm")
     public void initBinderUpdateAddress(WebDataBinder binder) {
         binder.addValidators(updateFormValidator);
     }
