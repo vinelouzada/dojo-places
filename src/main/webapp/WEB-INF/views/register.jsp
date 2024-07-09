@@ -43,3 +43,5 @@
 <form action="/addresses">
     <button>Voltar</button>
 </form>
+
+<script src="/assets/js/cep.js"></script>
