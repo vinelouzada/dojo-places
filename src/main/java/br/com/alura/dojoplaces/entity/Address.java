@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Entity
 public class Address {
@@ -89,27 +90,27 @@ public class Address {
         setNeighborhood(updateForm.getNeighborhood());
         setCode(updateForm.getCode());
         setStreet(updateForm.getStreet());
-        setUpdatedAt();
+        setUpdatedAt(LocalDateTime.now());
     }
 
-    public void setUpdatedAt(){
-        this.updatedAt = LocalDateTime.now();
+    public void setUpdatedAt(LocalDateTime updatedAt){
+        this.updatedAt = updatedAt;
     }
 
 
-    public String getUpdatedAtAsDaysAgo(){
+    public Optional<String> getUpdatedAtAsDaysAgo(){
 
         if (updatedAt == null){
-            return null;
+            return Optional.empty();
         }
 
         Duration daysAgo = Duration.between(updatedAt, LocalDateTime.now());
 
         if (daysAgo.toDays() == 1){
-            return daysAgo.toDays() + " dia atrás";
+            return Optional.of(daysAgo.toDays() + " dia atrás");
         }
 
-        return daysAgo.toDays() + " dias atrás";
+        return Optional.of(daysAgo.toDays() + " dias atrás");
     }
 
 }
