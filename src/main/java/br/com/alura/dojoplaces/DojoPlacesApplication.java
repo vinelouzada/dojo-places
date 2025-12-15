@@ -11,7 +11,7 @@ public class DojoPlacesApplication {
 
     @GetMapping("/oi")
     public String oi() {
-        return "/oi";
+        return "/oiiiiiiii";
     }
 
     public static void main(String[] args) {
